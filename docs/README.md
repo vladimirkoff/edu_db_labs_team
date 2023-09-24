@@ -13,7 +13,7 @@ footer: "ECL 2.0 Licensed | Copyright © [YYYY] [Your Name]"
 
 *студент 2-го курсу, групи ІМ-21 *<span padding-right:5em></span> **Маланін Данило danyamalanin7@gmail.com, https://t.me/danyamalanin**
 
-*студент(-ка) 2-го курсу, групи ІМ-21 *<span padding-right:5em></span> **Ковальов Володимир vovakovalev2016@icloud.com, https://t.me/VladKoff28**
+*студент 2-го курсу, групи ІМ-21 *<span padding-right:5em></span> **Демчик Дмитро dimascompetition@gmail.com, https://t.me/gainafterpain**
 
 *студент(-ка) 2-го курсу, групи ІМ-21 *<span padding-right:5em></span> **Ковальов Володимир vovakovalev2016@icloud.com, https://t.me/VladKoff28**
 
