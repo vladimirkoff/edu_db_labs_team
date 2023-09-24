@@ -9,7 +9,18 @@ footer: "ECL 2.0 Licensed | Copyright © [YYYY] [Your Name]"
 
 **Виконав(-ла):** 
 
-*студент(-ка) 2-го курсу, групи (шифр групи)*<span padding-right:5em></span> **[ім’я ПРІЗВИЩЕ] [Посилання email, tg, fb]**
+*студент(-ка) 2-го курсу, групи ІМ-21 *<span padding-right:5em></span> **Ковальов Володимир vovakovalev2016@icloud.com, https://t.me/VladKoff28**
+
+*студент 2-го курсу, групи ІМ-21 *<span padding-right:5em></span> **Маланін Данило danyamalanin7@gmail.com, https://t.me/danyamalanin**
+
+*студент(-ка) 2-го курсу, групи ІМ-21 *<span padding-right:5em></span> **Ковальов Володимир vovakovalev2016@icloud.com, https://t.me/VladKoff28**
+
+*студент(-ка) 2-го курсу, групи ІМ-21 *<span padding-right:5em></span> **Ковальов Володимир vovakovalev2016@icloud.com, https://t.me/VladKoff28**
+
+*студент(-ка) 2-го курсу, групи ІМ-21 *<span padding-right:5em></span> **Ковальов Володимир vovakovalev2016@icloud.com, https://t.me/VladKoff28**
+
+*студент(-ка) 2-го курсу, групи ІМ-21 *<span padding-right:5em></span> **Ковальов Володимир vovakovalev2016@icloud.com, https://t.me/VladKoff28**
+
 
 
 **Керівник**
