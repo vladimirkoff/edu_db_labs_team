@@ -17,7 +17,7 @@ footer: "ECL 2.0 Licensed | Copyright © [YYYY] [Your Name]"
 
 студент 2-го курсу, групи ІМ-21 *<span padding-right:5em></span> **Хвиць Максим m.khvyts.im21@kpi.ua, https://t.me/makskhv21**
 
-*студент(-ка) 2-го курсу, групи ІМ-21 *<span padding-right:5em></span> **Ковальов Володимир vovakovalev2016@icloud.com, https://t.me/VladKoff28**
+*студент 2-го курсу, групи ІМ-21 *<span padding-right:5em></span> **Матюшенко Костянтин kostamatusenko@gmail.com, https://t.me/ekostislav**
 
 *студент(-ка) 2-го курсу, групи ІМ-21 *<span padding-right:5em></span> **Ковальов Володимир vovakovalev2016@icloud.com, https://t.me/VladKoff28**
 
