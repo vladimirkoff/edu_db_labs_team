@@ -105,8 +105,6 @@
 
 ## Посилання
 
-*[Розділ містить повний список всіх документів, про які згадується.]*
-
 1. **Система** *Wikipedia* [Link](https://uk.wikipedia.org/wiki/%D0%A1%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D0%B0)
 
 2. **Медіа** *Wikipedia* [Link](https://uk.wikipedia.org/wiki/%D0%9C%D0%B5%D0%B4%D1%96%D0%B0)
