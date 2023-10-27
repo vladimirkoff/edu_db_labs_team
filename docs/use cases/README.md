@@ -4,7 +4,7 @@
 
 @startuml
 
-left to right direction
+top to bottom direction
 
 actor "Користувач" as User
 actor "Адміністратор" as Admin
@@ -31,6 +31,7 @@ Admin --> GrantPermissions
 
 
 
+
 ## Схема використання для користувача
 
 @startuml
@@ -48,17 +49,17 @@ usecase "Створення нового облікового запису" as C
 usecase "Відновлення паролю" as PasswordRecovery
 
 User --> Registration
-Registration --> CreateAccount
-Registration --> PasswordRecovery
+CreateAccount -u-> Registration: extends
+PasswordRecovery -u-> Registration: extends
 
 User --> Login
-Login --> PasswordRecovery
+PasswordRecovery -u-> Login: extends
 
 User --> SearchWithFilters
-SearchWithFilters --> DataFiltering
-SearchWithFilters --> DataSearch
-DataFiltering --> SortSearchResults
-DataSearch --> SortSearchResults
+DataFiltering -u-> SearchWithFilters: extends
+DataSearch -u-> SearchWithFilters: extends
+SortSearchResults -u-> DataFiltering: extends
+SortSearchResults -u-> DataSearch: extends
 
 @enduml
 
@@ -77,15 +78,14 @@ usecase "Створення резервної копії" as CreateBackup
 usecase "Видалення джерела" as DeleteSource
 
 Admin --> DeleteAccount
-DeleteAccount --> CreateBackup
+CreateBackup -u-> DeleteAccount: extends
 
 Admin --> AddSource
-AddSource --> DeleteSource
+DeleteSource -u-> AddSource: extends
 
 Admin --> GrantPermissions
 
 @enduml
-
 
 ## Сценарії викристання для користувача
 
