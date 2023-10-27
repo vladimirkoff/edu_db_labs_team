@@ -1,15 +1,108 @@
 # Модель прецедентів
 
-## Діаграма прецедентів
+## Діаграма кейсів
+
+@startuml
+
+left to right direction
+
+actor "Користувач" as User
+actor "Адміністратор" as Admin
+
+User --|> Admin
+
+usecase "Реєстрація" as Registration
+usecase "Авторизація" as Login
+usecase "Пошук та фільтрація даних" as SearchAndFilter
+
+User --> Registration
+User --> Login
+User --> SearchAndFilter
+
+usecase "Видалення облікового запису" as DeleteAccount
+usecase "Додавання нового джерела" as AddSource
+usecase "Надання прав" as GrantPermissions
+
+Admin --> DeleteAccount
+Admin --> AddSource
+Admin --> GrantPermissions
+
+@enduml
 
 
 
 ## Схема використання для користувача
 
+@startuml
+
+actor "Користувач" as User
+
+usecase "Реєстрація" as Registration
+usecase "Авторизація" as Login
+usecase "Пошук даних за фільтрами" as SearchWithFilters
+usecase "Сортування результатів пошуку" as SortSearchResults
+usecase "Фільтрація даних" as DataFiltering
+usecase "Пошук даних" as DataSearch
+
+usecase "Створення нового облікового запису" as CreateAccount
+usecase "Відновлення паролю" as PasswordRecovery
+
+usecase "Помилка при реєстрації" as RegistrationError
+usecase "Помилка при авторизації" as LoginError
+usecase "Помилка при пошуку даних" as DataSearchError
+
+User --> Registration
+Registration --> CreateAccount
+Registration --> PasswordRecovery
+Registration -down-> RegistrationError
+
+User --> Login
+Login --> PasswordRecovery
+Login -down-> LoginError
+
+User --> SearchWithFilters
+SearchWithFilters --> DataFiltering
+SearchWithFilters --> DataSearch
+DataFiltering --> SortSearchResults
+DataSearch --> SortSearchResults
+SortSearchResults -down-> DataSearchError
+
+@enduml
 
 
 ## Схема використання для адміністратора
 
+@startuml
+
+actor "Адміністратор" as Admin
+
+usecase "Видалення облікового запису" as DeleteAccount
+usecase "Додавання нового джерела" as AddSource
+usecase "Надання додаткових прав" as GrantPermissions
+
+usecase "Створення резервної копії" as CreateBackup
+usecase "Видалення джерела" as DeleteSource
+
+usecase "Помилка при видаленні облікового запису" as DeleteAccountError
+usecase "Помилка при додаванні джерела" as AddSourceError
+usecase "Помилка при наданні додаткових прав" as GrantPermissionsError
+usecase "Помилка при створенні резервної копії" as CreateBackupError
+usecase "Помилка при видаленні джерела" as DeleteSourceError
+
+Admin --> DeleteAccount
+DeleteAccount --> CreateBackup
+DeleteAccount -down-> DeleteAccountError
+CreateBackup -down-> CreateBackupError
+
+Admin --> AddSource
+AddSource --> DeleteSource
+AddSource -down-> AddSourceError
+DeleteSource -down-> DeleteSourceError
+
+Admin --> GrantPermissions
+GrantPermissions -down-> GrantPermissionsError
+
+@enduml
 
 
 ## Сценарії викристання для користувача
