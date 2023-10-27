@@ -47,25 +47,18 @@ usecase "Пошук даних" as DataSearch
 usecase "Створення нового облікового запису" as CreateAccount
 usecase "Відновлення паролю" as PasswordRecovery
 
-usecase "Помилка при реєстрації" as RegistrationError
-usecase "Помилка при авторизації" as LoginError
-usecase "Помилка при пошуку даних" as DataSearchError
-
 User --> Registration
 Registration --> CreateAccount
 Registration --> PasswordRecovery
-Registration -down-> RegistrationError
 
 User --> Login
 Login --> PasswordRecovery
-Login -down-> LoginError
 
 User --> SearchWithFilters
 SearchWithFilters --> DataFiltering
 SearchWithFilters --> DataSearch
 DataFiltering --> SortSearchResults
 DataSearch --> SortSearchResults
-SortSearchResults -down-> DataSearchError
 
 @enduml
 
@@ -83,24 +76,13 @@ usecase "Надання додаткових прав" as GrantPermissions
 usecase "Створення резервної копії" as CreateBackup
 usecase "Видалення джерела" as DeleteSource
 
-usecase "Помилка при видаленні облікового запису" as DeleteAccountError
-usecase "Помилка при додаванні джерела" as AddSourceError
-usecase "Помилка при наданні додаткових прав" as GrantPermissionsError
-usecase "Помилка при створенні резервної копії" as CreateBackupError
-usecase "Помилка при видаленні джерела" as DeleteSourceError
-
 Admin --> DeleteAccount
 DeleteAccount --> CreateBackup
-DeleteAccount -down-> DeleteAccountError
-CreateBackup -down-> CreateBackupError
 
 Admin --> AddSource
 AddSource --> DeleteSource
-AddSource -down-> AddSourceError
-DeleteSource -down-> DeleteSourceError
 
 Admin --> GrantPermissions
-GrantPermissions -down-> GrantPermissionsError
 
 @enduml
 
