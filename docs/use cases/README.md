@@ -39,13 +39,12 @@ actor "Користувач" as User
 usecase "<b>user_register</b>\nРеєстрація" as Registration
 usecase "<b>user_login</b>\nАвторизація" as Login
 usecase "<b>media_search</b>\nПошук даних за фільтрами" as SearchWithFilters
-
 usecase "<b>pass_rec</b>\nВідновлення паролю" as PasswordRecovery
 
 User --> Registration
 
 User --> Login
-PasswordRecovery -u-> Login: extends
+PasswordRecovery .u.> Login: <<extends>>
 
 User --> SearchWithFilters
 
@@ -67,12 +66,12 @@ usecase "<b>add_rights</b>\nНадання додаткових прав\n ко�
 usecase "<b>delete_source</b>\nВидалення джерела" as DeleteSource
 
 Admin --> ManipAccount
-DeleteAccount -u-> ManipAccount:extends
-GrantPermissions -u-> ManipAccount:extends
+DeleteAccount .u.> ManipAccount: <<extends>>
+GrantPermissions .u.> ManipAccount: <<extends>>
 
 Admin --> ManipSource
-AddSource -u-> ManipSource:extends
-DeleteSource -u-> ManipSource:extends
+AddSource .u.> ManipSource: <<extends>>
+DeleteSource .u.> ManipSource: <<extends>>
 
 @enduml
 
