@@ -6,26 +6,24 @@
 
 top to bottom direction
 
-actor "Користувач" as User
+actor "Користувач" as User 
 actor "Адміністратор" as Admin
 
-User --|> Admin
+Admin -u-|> User
 
-usecase "Реєстрація" as Registration
-usecase "Авторизація" as Login
-usecase "Пошук та фільтрація даних" as SearchAndFilter
+usecase "<b>user_register</b>\nРеєстрація" as Registration 
+usecase "<b>user_login</b>\nАвторизація" as Login 
+usecase "<b>media_search</b>\nПошук даних за фільтрами" as SearchAndFilter
 
-User --> Registration
-User --> Login
-User --> SearchAndFilter
+User -l-> Registration 
+User -r-> Login 
+User -u-> SearchAndFilter
 
-usecase "Видалення облікового запису" as DeleteAccount
-usecase "Додавання нового джерела" as AddSource
-usecase "Надання прав" as GrantPermissions
+usecase "<b>acc_manip</b>\nКерування обліковими\n записами користувачів" as ManipAccount 
+usecase "<b>source_manip</b>\nКерування джерелами інформації" as ManipSource 
 
-Admin --> DeleteAccount
-Admin --> AddSource
-Admin --> GrantPermissions
+Admin --> ManipAccount 
+Admin --> ManipSource 
 
 @enduml
 
@@ -38,28 +36,18 @@ Admin --> GrantPermissions
 
 actor "Користувач" as User
 
-usecase "Реєстрація" as Registration
-usecase "Авторизація" as Login
-usecase "Пошук даних за фільтрами" as SearchWithFilters
-usecase "Сортування результатів пошуку" as SortSearchResults
-usecase "Фільтрація даних" as DataFiltering
-usecase "Пошук даних" as DataSearch
+usecase "<b>user_register</b>\nРеєстрація" as Registration
+usecase "<b>user_login</b>\nАвторизація" as Login
+usecase "<b>media_search</b>\nПошук даних за фільтрами" as SearchWithFilters
 
-usecase "Створення нового облікового запису" as CreateAccount
-usecase "Відновлення паролю" as PasswordRecovery
+usecase "<b>pass_rec</b>\nВідновлення паролю" as PasswordRecovery
 
 User --> Registration
-CreateAccount -u-> Registration: extends
-PasswordRecovery -u-> Registration: extends
 
 User --> Login
 PasswordRecovery -u-> Login: extends
 
 User --> SearchWithFilters
-DataFiltering -u-> SearchWithFilters: extends
-DataSearch -u-> SearchWithFilters: extends
-SortSearchResults -u-> DataFiltering: extends
-SortSearchResults -u-> DataSearch: extends
 
 @enduml
 
@@ -70,20 +58,21 @@ SortSearchResults -u-> DataSearch: extends
 
 actor "Адміністратор" as Admin
 
-usecase "Видалення облікового запису" as DeleteAccount
-usecase "Додавання нового джерела" as AddSource
-usecase "Надання додаткових прав" as GrantPermissions
+usecase "<b>acc_manip</b>\nКерування обліковими\n записами користувачів" as ManipAccount 
+usecase "<b>source_manip</b>\nКерування джерелами інформації" as ManipSource 
 
-usecase "Створення резервної копії" as CreateBackup
-usecase "Видалення джерела" as DeleteSource
+usecase "<b>delete_account</b>\nВидалення облікового запису\n користувача" as DeleteAccount
+usecase "<b>add_source</b>\nДодавання нового джерела" as AddSource
+usecase "<b>add_rights</b>\nНадання додаткових прав\n користувачу" as GrantPermissions
+usecase "<b>delete_source</b>\nВидалення джерела" as DeleteSource
 
-Admin --> DeleteAccount
-CreateBackup -u-> DeleteAccount: extends
+Admin --> ManipAccount
+DeleteAccount -u-> ManipAccount:extends
+GrantPermissions -u-> ManipAccount:extends
 
-Admin --> AddSource
-DeleteSource -u-> AddSource: extends
-
-Admin --> GrantPermissions
+Admin --> ManipSource
+AddSource -u-> ManipSource:extends
+DeleteSource -u-> ManipSource:extends
 
 @enduml
 
