@@ -77,6 +77,74 @@ Media "0, *" -d- "1, 1" Origin
 ## ER-модель
 
 
+<center style="
+    border-radius:4px;
+    border: 1px solid #cfd7e6;
+    box-shadow: 0 1px 3px 0 rgba(89,105,129,.05), 0 1px 1px 0 rgba(0,0,0,.025);
+    padding: 1em;"
+>
+  
+@startuml
+
+!define ADMIN_COLOR #CB2D1A
+!define USER_COLOR #27CB1A
+!define OVERALL_COLOR #71AEF6
+
+entity "Origin" as origin <<E, ADMIN_COLOR>> {
+  +id: int
+  --
+  name: string
+  location: string
+  rating: int
+}
+
+entity "Media" as media <<E, OVERALL_COLOR>> {
+  +id: int
+  --
+  type: string
+  url: string
+  name: string
+  metadata: string
+}
+
+entity "Request" as request <<E, OVERALL_COLOR>> {
+  +id: int
+  --
+  description: string
+}
+
+entity "User" as user <<E, USER_COLOR>> {
+  +id: int
+  --
+  name: string
+  login: string
+  password: string
+  email: string
+}
+
+entity "Role" as role <<E, ADMIN_COLOR>> {
+  +id: int
+  --
+  name: string
+  grants: string
+}
+
+entity "Grant" as grant <<E, ADMIN_COLOR>> {
+  +id: int
+  --
+  title: string
+  description: string
+}
+
+origin "1,1"--"0,*" media
+media "1,1"--"1,*" request
+request "0,*"--"1,1" user
+user "0,*"--"1,1" role
+role "0,1"--"1,*" grant
+
+@enduml
+
+
 
 ## Реляційна схема
 
