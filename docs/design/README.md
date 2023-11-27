@@ -148,3 +148,4 @@ role "0,1"--"1,*" grant
 
 ## Реляційна схема
 
+![image](https://github.com/vladimirkoff/edu_db_labs_team/assets/113525627/8aabb786-d3b5-47b5-935a-a124fb703ee1)
