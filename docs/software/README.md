@@ -164,8 +164,8 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `mydb`;
-INSERT INTO `mydb`.`user` (`id`, `name`, `login`, `password`, `email`, `role`) VALUES (DEFAULT, 'Володимир', 'Дмитро', '123456', 'kovalov280305@gmail.com', 'public');
-INSERT INTO `mydb`.`user` (`id`, `name`, `login`, `password`, `email`, `role`) VALUES (DEFAULT, 'Данило', 'Максим', '123456', 'kovalov280305@gmail.com', 'public');
+INSERT INTO `mydb`.`user` (`id`, `name`, `login`, `password`, `email`, `role`) VALUES (DEFAULT, 'John', 'JohnRoth', 'passw123', 'j@email.com', 'public');
+INSERT INTO `mydb`.`user` (`id`, `name`, `login`, `password`, `email`, `role`) VALUES (DEFAULT, 'Kate', 'KateDotson', 'passw124', 'k@email.com', 'public');
 
 COMMIT;
 
@@ -175,8 +175,8 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `mydb`;
-INSERT INTO `mydb`.`request` (`id`, `title`, `description`, `date`, `filter_id`) VALUES (DEFAULT, 'Text search query ', 'український бізнес під час війни', '2023-12-24', NULL);
-INSERT INTO `mydb`.`request` (`id`, `title`, `description`, `date`, `filter_id`) VALUES (DEFAULT, 'Photo search query', 'фото лазаньї оригінального рецепту', '2023-12-24', NULL);
+INSERT INTO `mydb`.`request` (`id`, `title`, `description`, `date`, `filter_id`) VALUES (DEFAULT, 'Text search query ', 'breaking news around the world', '2022-12-02', NULL);
+INSERT INTO `mydb`.`request` (`id`, `title`, `description`, `date`, `filter_id`) VALUES (DEFAULT, 'Photo search query', 'find similar images', '2022-11-20', NULL);
 
 COMMIT;
 
@@ -186,7 +186,7 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `mydb`;
-INSERT INTO `mydb`.`source` (`id`, `url`, `request_id`) VALUES (DEFAULT, 'https://forbes.ua', NULL);
+INSERT INTO `mydb`.`source` (`id`, `url`, `request_id`) VALUES (DEFAULT, 'https://www.nytimes.com/', NULL);
 INSERT INTO `mydb`.`source` (`id`, `url`, `request_id`) VALUES (DEFAULT, 'https://images.google.com/', NULL);
 
 COMMIT;
@@ -239,7 +239,7 @@ router.post('/result', (req, res) => {
   const { title, description, request_id } = req.body;
   
   if(!(title && description && request_id)) {
-    res.send('Пусте поле');
+    res.send('There is empty field.');
     return;
   }
   
@@ -249,10 +249,10 @@ router.post('/result', (req, res) => {
   (error) => {
     if (error) {
       console.log(error);
-      res.send('Сталася помилка');
+      res.send('Something went wrong.');
       return;
     }
-    res.send('Додано');
+    res.send('Record has been added');
   });
 });
   
@@ -261,7 +261,7 @@ router.post('/result/:id', (req, res) => {
   const { title, description, request_id } = req.body;
   
   if(!(title && description && request_id)) {
-    res.send('Пусте поле');
+    res.send('There is empty field.');
     return;
   } 
   
@@ -271,10 +271,10 @@ router.post('/result/:id', (req, res) => {
   (error) => {
     if (error) {
       console.log(error);
-      res.send('Сталася помилка');
+      res.send('Something went wrong.');
       return;
     }
-    res.send('Додано');
+    res.send('Record has been added');
   });
 });
   
@@ -283,7 +283,7 @@ router.get('/results', (req, res) => {
   (error, result) => {
     if (error) {
       console.log(error);
-      res.send('Сталася помилка');
+      res.send('Something went wrong.');
       return;
     }
     res.send(result);
@@ -296,7 +296,7 @@ router.get('/result/:id', (req, res) => {
   (error, result) => {
     if (error) {
       console.log(error);
-      res.send('Сталася помилка');
+      res.send('Something went wrong.');
       return;
     }
     res.send(result);
@@ -311,7 +311,7 @@ router.put('/result/:id', (req, res) => {
     if (error) {
       console.log(result);
       console.log(error);
-      res.send('Сталася помилка');
+      res.send('Something went wrong.');
       return;
     }
     const { title, description, request_id } = { ...result, ...req.body};
@@ -324,10 +324,10 @@ router.put('/result/:id', (req, res) => {
     (error) => {
       if (error) {
         console.log(error);
-      res.send('Сталася помилка');
+        res.send('Something went wrong.');
         return;
       }
-      res.send('Оновлено');
+      res.send('Record has been updated');
     });
   });
 });
@@ -338,10 +338,10 @@ router.delete('/result/:id', (req, res) => {
   (error) => {
     if (error) {
       console.log(error);
-      res.send('Сталася помилка');
+      res.send('Something went wrong.');
       return;
     }
-    res.send('Видалено');
+    res.send('Record has been deleted');
   });
 });
 

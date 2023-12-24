@@ -6,7 +6,7 @@ router.post('/result', (req, res) => {
   const { title, description, request_id } = req.body;
   
   if(!(title && description && request_id)) {
-    res.send('Пусте поле');
+    res.send('There is empty field.');
     return;
   }
   
@@ -16,10 +16,10 @@ router.post('/result', (req, res) => {
   (error) => {
     if (error) {
       console.log(error);
-      res.send('Сталася помилка');
+      res.send('Something went wrong.');
       return;
     }
-    res.send('Додано');
+    res.send('Record has been added');
   });
 });
   
@@ -28,7 +28,7 @@ router.post('/result/:id', (req, res) => {
   const { title, description, request_id } = req.body;
   
   if(!(title && description && request_id)) {
-    res.send('Пусте поле');
+    res.send('There is empty field.');
     return;
   } 
   
@@ -38,10 +38,10 @@ router.post('/result/:id', (req, res) => {
   (error) => {
     if (error) {
       console.log(error);
-      res.send('Сталася помилка');
+      res.send('Something went wrong.');
       return;
     }
-    res.send('Додано');
+    res.send('Record has been added');
   });
 });
   
@@ -50,7 +50,7 @@ router.get('/results', (req, res) => {
   (error, result) => {
     if (error) {
       console.log(error);
-      res.send('Сталася помилка');
+      res.send('Something went wrong.');
       return;
     }
     res.send(result);
@@ -63,7 +63,7 @@ router.get('/result/:id', (req, res) => {
   (error, result) => {
     if (error) {
       console.log(error);
-      res.send('Сталася помилка');
+      res.send('Something went wrong.');
       return;
     }
     res.send(result);
@@ -78,7 +78,7 @@ router.put('/result/:id', (req, res) => {
     if (error) {
       console.log(result);
       console.log(error);
-      res.send('Сталася помилка');
+      res.send('Something went wrong.');
       return;
     }
     const { title, description, request_id } = { ...result, ...req.body};
@@ -91,10 +91,10 @@ router.put('/result/:id', (req, res) => {
     (error) => {
       if (error) {
         console.log(error);
-        res.send('Сталася помилка');
+        res.send('Something went wrong.');
         return;
       }
-      res.send('Оновлено');
+      res.send('Record has been updated');
     });
   });
 });
@@ -105,10 +105,10 @@ router.delete('/result/:id', (req, res) => {
   (error) => {
     if (error) {
       console.log(error);
-      res.send('Сталася помилка');
+      res.send('Something went wrong.');
       return;
     }
-    res.send('Видалено');
+    res.send('Record has been deleted');
   });
 });
 
