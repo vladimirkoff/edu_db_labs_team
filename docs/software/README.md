@@ -1,6 +1,6 @@
 # Реалізація інформаційного та програмного забезпечення
 
-## SQL-скрипт для створення та початкового наповнення бази даних
+## SQL-скрипт 
 
 ```sql
 -- MySQL Workbench Forward Engineering
@@ -164,8 +164,8 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `mydb`;
-INSERT INTO `mydb`.`user` (`id`, `name`, `login`, `password`, `email`, `role`) VALUES (DEFAULT, 'John', 'JohnRoth', 'passw123', 'j@email.com', 'public');
-INSERT INTO `mydb`.`user` (`id`, `name`, `login`, `password`, `email`, `role`) VALUES (DEFAULT, 'Kate', 'KateDotson', 'passw124', 'k@email.com', 'public');
+INSERT INTO `mydb`.`user` (`id`, `name`, `login`, `password`, `email`, `role`) VALUES (DEFAULT, 'Володимир', 'Ковальов', '123456', 'vladimir@gmail.com', 'public');
+INSERT INTO `mydb`.`user` (`id`, `name`, `login`, `password`, `email`, `role`) VALUES (DEFAULT, 'Дмитро', 'Демчик', '123456', 'dmytro@gmail.com', 'public');
 
 COMMIT;
 
@@ -175,8 +175,8 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `mydb`;
-INSERT INTO `mydb`.`request` (`id`, `title`, `description`, `date`, `filter_id`) VALUES (DEFAULT, 'Text search query ', 'breaking news around the world', '2022-12-02', NULL);
-INSERT INTO `mydb`.`request` (`id`, `title`, `description`, `date`, `filter_id`) VALUES (DEFAULT, 'Photo search query', 'find similar images', '2022-11-20', NULL);
+INSERT INTO `mydb`.`request` (`id`, `title`, `description`, `date`, `filter_id`) VALUES (DEFAULT, 'Text search', 'Український бізнес 2023', '2023-12-20', NULL);
+INSERT INTO `mydb`.`request` (`id`, `title`, `description`, `date`, `filter_id`) VALUES (DEFAULT, 'Photo search', 'Пошук картинок', '2023-12-20', NULL);
 
 COMMIT;
 
@@ -186,15 +186,15 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `mydb`;
-INSERT INTO `mydb`.`source` (`id`, `url`, `request_id`) VALUES (DEFAULT, 'https://www.nytimes.com/', NULL);
+INSERT INTO `mydb`.`source` (`id`, `url`, `request_id`) VALUES (DEFAULT, 'https://forbes.ua', NULL);
 INSERT INTO `mydb`.`source` (`id`, `url`, `request_id`) VALUES (DEFAULT, 'https://images.google.com/', NULL);
 
 COMMIT;
 ```
 
-## RESTfull сервіс для управління даними
+## RESTfull сервіс 
 
-### Головний файл, з якого відбувається запуск сервера
+### Файл запуску сервера
 
 ```js
 const express = require('express');
@@ -211,139 +211,98 @@ app.use(bodyParser.json());
 app.use(router);
 
 app.listen(port, () => {
-  console.log(`Server started on localhost:${port}`);
+  console.log(`Сервер запущений на localhost:${port}`);
 });
 ```
 
 ### Модуль підключення до бази даних
 
 ```js
-const mysql = require('mysql2');
-
-const connectionUrl = 'mysql://root:k1llr34l@localhost:3306/mydb';
-const connection = mysql.createConnection({
-  uri: connectionUrl
-});
-
-module.exports = connection;
-```
-
-### Модуль з реалізацією REST API до таблиці Result
-
-```js
 const express = require('express');
 const connection = require('./connection');
 const router = express.Router();
 
-router.post('/result', (req, res) => {
-  const { title, description, request_id } = req.body;
-  
-  if(!(title && description && request_id)) {
-    res.send('There is empty field.');
-    return;
+const handleErrors = (res, error, successMessage) => {
+  if (error) {
+    console.log(error);
+    res.send('Сталася помилка');
+    return false;
   }
-  
-  connection.query(
-    `INSERT INTO result (id, title, description, request_id) 
-    VALUES (DEFAULT, '${title}', '${description}', ${request_id})`,
-  (error) => {
-    if (error) {
-      console.log(error);
-      res.send('Something went wrong.');
-      return;
-    }
-    res.send('Record has been added');
-  });
-});
-  
-router.post('/result/:id', (req, res) => {
-  const id = req.params.id;
+  res.send(successMessage);
+  return true;
+};
+
+router.post('/results', async (req, res) => {
   const { title, description, request_id } = req.body;
-  
-  if(!(title && description && request_id)) {
-    res.send('There is empty field.');
-    return;
-  } 
-  
-  connection.query(
-    `INSERT INTO result (id, title, description, request_id) 
-    VALUES (${id}, '${title}', '${description}', ${request_id})`,
-  (error) => {
-    if (error) {
-      console.log(error);
-      res.send('Something went wrong.');
-      return;
-    }
-    res.send('Record has been added');
-  });
+
+  if (!(title && description && request_id)) {
+    return res.send('Пусте поле');
+  }
+
+  try {
+    const result = await connection.query(
+      'INSERT INTO result (id, title, description, request_id) VALUES (DEFAULT, ?, ?, ?)',
+      [title, description, request_id]
+    );
+
+    handleErrors(res, result.error, 'Додано');
+  } catch (error) {
+    handleErrors(res, error, 'Сталася помилка');
+  }
 });
-  
-router.get('/results', (req, res) => {
-  connection.query('SELECT * FROM result', 
-  (error, result) => {
-    if (error) {
-      console.log(error);
-      res.send('Something went wrong.');
-      return;
-    }
+
+router.get('/results', async (req, res) => {
+  try {
+    const results = await connection.query('SELECT * FROM result');
+    res.send(results);
+  } catch (error) {
+    handleErrors(res, error, 'Сталася помилка');
+  }
+});
+
+router.get('/result/:id', async (req, res) => {
+  const id = req.params.id;
+  try {
+    const result = await connection.query('SELECT * FROM result WHERE id = ?', [id]);
     res.send(result);
-  });
+  } catch (error) {
+    handleErrors(res, error, 'Сталася помилка');
+  }
 });
-  
-router.get('/result/:id', (req, res) => {
+
+router.put('/result/:id', async (req, res) => {
   const id = req.params.id;
-  connection.query(`SELECT * FROM result WHERE id = ${id}`,
-  (error, result) => {
-    if (error) {
-      console.log(error);
-      res.send('Something went wrong.');
-      return;
+
+  try {
+    const [existingResult] = await connection.query('SELECT * FROM result WHERE id = ?', [id]);
+
+    if (!existingResult) {
+      return res.send('Результат не знайдено');
     }
-    res.send(result);
-  });
+
+    const updatedResult = { ...existingResult, ...req.body };
+    await connection.query(
+      'UPDATE result SET title = ?, description = ?, request_id = ? WHERE id = ?',
+      [updatedResult.title, updatedResult.description, updatedResult.request_id, id]
+    );
+
+    handleErrors(res, null, 'Оновлено');
+  } catch (error) {
+    handleErrors(res, error, 'Сталася помилка');
+  }
 });
-  
-router.put('/result/:id', (req, res) => {
+
+router.delete('/result/:id', async (req, res) => {
   const id = req.params.id;
-  
-  connection.query(`SELECT * FROM result WHERE id = ${id}`,
-  (error, [result]) => {
-    if (error) {
-      console.log(result);
-      console.log(error);
-      res.send('Something went wrong.');
-      return;
-    }
-    const { title, description, request_id } = { ...result, ...req.body};
-    connection.query(
-      `UPDATE result 
-      SET title = '${title}', 
-      description = '${description}', 
-      request_id = ${request_id} 
-      WHERE id = ${id}`,
-    (error) => {
-      if (error) {
-        console.log(error);
-        res.send('Something went wrong.');
-        return;
-      }
-      res.send('Record has been updated');
-    });
-  });
-});
-  
-router.delete('/result/:id', (req, res) => {
-  const id = req.params.id;
-  connection.query(`DELETE FROM result WHERE id = ${id}`,
-  (error) => {
-    if (error) {
-      console.log(error);
-      res.send('Something went wrong.');
-      return;
-    }
-    res.send('Record has been deleted');
-  });
+
+  try {
+    const result = await connection.query('DELETE FROM result WHERE id = ?', [id]);
+    handleErrors(res, result.error, 'Видалено');
+  } catch (error) {
+    handleErrors(res, error, 'Сталася помилка');
+  }
 });
 
 module.exports = router;
+
 ```
