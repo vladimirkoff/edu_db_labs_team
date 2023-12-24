@@ -1,12 +1,5 @@
 # Тестування працездатності системи
 
-## Основні положення
-
-Тестування відбувається через **Postman** - програмне забезпечення для роботи з API (у тому числі тестування).
-
-Запуск серверу з файлу **start.js**:  
-![alt text](test/img/start.png)
-
 ## Тестування REST API
 
 ### POST - create
@@ -20,9 +13,7 @@
 
 ### GET - read
 
-#### Усі елементи
-![alt text](test/img/post_after.png)
-#### Пошук за ID
+#### Пошук за id
 ![alt text](test/img/get_id.png)
 
 ### PUT - update

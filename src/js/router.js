@@ -2,114 +2,85 @@ const express = require('express');
 const connection = require('./connection');
 const router = express.Router();
 
-router.post('/result', (req, res) => {
-  const { title, description, request_id } = req.body;
-  
-  if(!(title && description && request_id)) {
-    res.send('There is empty field.');
-    return;
+const handleErrors = (res, error, successMessage) => {
+  if (error) {
+    console.log(error);
+    res.send('Сталася помилка');
+    return false;
   }
-  
-  connection.query(
-    `INSERT INTO result (id, title, description, request_id) 
-    VALUES (DEFAULT, '${title}', '${description}', ${request_id})`,
-  (error) => {
-    if (error) {
-      console.log(error);
-      res.send('Something went wrong.');
-      return;
-    }
-    res.send('Record has been added');
-  });
-});
-  
-router.post('/result/:id', (req, res) => {
-  const id = req.params.id;
+  res.send(successMessage);
+  return true;
+};
+
+router.post('/results', async (req, res) => {
   const { title, description, request_id } = req.body;
-  
-  if(!(title && description && request_id)) {
-    res.send('There is empty field.');
-    return;
-  } 
-  
-  connection.query(
-    `INSERT INTO result (id, title, description, request_id) 
-    VALUES (${id}, '${title}', '${description}', ${request_id})`,
-  (error) => {
-    if (error) {
-      console.log(error);
-      res.send('Something went wrong.');
-      return;
-    }
-    res.send('Record has been added');
-  });
+
+  if (!(title && description && request_id)) {
+    return res.send('Пусте поле');
+  }
+
+  try {
+    const result = await connection.query(
+      'INSERT INTO result (id, title, description, request_id) VALUES (DEFAULT, ?, ?, ?)',
+      [title, description, request_id]
+    );
+
+    handleErrors(res, result.error, 'Додано');
+  } catch (error) {
+    handleErrors(res, error, 'Сталася помилка');
+  }
 });
-  
-router.get('/results', (req, res) => {
-  connection.query('SELECT * FROM result', 
-  (error, result) => {
-    if (error) {
-      console.log(error);
-      res.send('Something went wrong.');
-      return;
-    }
+
+router.get('/results', async (req, res) => {
+  try {
+    const results = await connection.query('SELECT * FROM result');
+    res.send(results);
+  } catch (error) {
+    handleErrors(res, error, 'Сталася помилка');
+  }
+});
+
+router.get('/result/:id', async (req, res) => {
+  const id = req.params.id;
+  try {
+    const result = await connection.query('SELECT * FROM result WHERE id = ?', [id]);
     res.send(result);
-  });
+  } catch (error) {
+    handleErrors(res, error, 'Сталася помилка');
+  }
 });
-  
-router.get('/result/:id', (req, res) => {
+
+router.put('/result/:id', async (req, res) => {
   const id = req.params.id;
-  connection.query(`SELECT * FROM result WHERE id = ${id}`,
-  (error, result) => {
-    if (error) {
-      console.log(error);
-      res.send('Something went wrong.');
-      return;
+
+  try {
+    const [existingResult] = await connection.query('SELECT * FROM result WHERE id = ?', [id]);
+
+    if (!existingResult) {
+      return res.send('Результат не знайдено');
     }
-    res.send(result);
-  });
+
+    const updatedResult = { ...existingResult, ...req.body };
+    await connection.query(
+      'UPDATE result SET title = ?, description = ?, request_id = ? WHERE id = ?',
+      [updatedResult.title, updatedResult.description, updatedResult.request_id, id]
+    );
+
+    handleErrors(res, null, 'Оновлено');
+  } catch (error) {
+    handleErrors(res, error, 'Сталася помилка');
+  }
 });
-  
-router.put('/result/:id', (req, res) => {
+
+router.delete('/result/:id', async (req, res) => {
   const id = req.params.id;
-  
-  connection.query(`SELECT * FROM result WHERE id = ${id}`,
-  (error, [result]) => {
-    if (error) {
-      console.log(result);
-      console.log(error);
-      res.send('Something went wrong.');
-      return;
-    }
-    const { title, description, request_id } = { ...result, ...req.body};
-    connection.query(
-      `UPDATE result 
-      SET title = '${title}', 
-      description = '${description}', 
-      request_id = ${request_id} 
-      WHERE id = ${id}`,
-    (error) => {
-      if (error) {
-        console.log(error);
-        res.send('Something went wrong.');
-        return;
-      }
-      res.send('Record has been updated');
-    });
-  });
-});
-  
-router.delete('/result/:id', (req, res) => {
-  const id = req.params.id;
-  connection.query(`DELETE FROM result WHERE id = ${id}`,
-  (error) => {
-    if (error) {
-      console.log(error);
-      res.send('Something went wrong.');
-      return;
-    }
-    res.send('Record has been deleted');
-  });
+
+  try {
+    const result = await connection.query('DELETE FROM result WHERE id = ?', [id]);
+    handleErrors(res, result.error, 'Видалено');
+  } catch (error) {
+    handleErrors(res, error, 'Сталася помилка');
+  }
 });
 
 module.exports = router;

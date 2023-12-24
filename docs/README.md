@@ -7,9 +7,9 @@ footer: "ECL 2.0 Licensed | Copyright © [2023] [KPI students]"
 ---
 
 
-**Виконали:** 
+**Виконав:** 
 
-*студент 2-го курсу, групи ІМ-21*<span padding-right:5em></span> **Ковальов Володимир**   vovakovalev2016@icloud.com,   [Telegram](https://t.me/VladKoff28)
+*студент 2-го курсу, групи ІМ-21*<span padding-right:5em></span> **Ковальов Володимир**   vovakovalev2016@icloud.com,   [Telegram](https://t.me/vladimirkoff)
 
 **Керівник**
 
