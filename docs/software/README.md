@@ -1,7 +1,6 @@
 # Реалізація інформаційного та програмного забезпечення
 
-## SQL-скрипт для створення на початкового наповнення бази даних
-
+## SQL-скрипт для створення та початкового наповнення бази даних
 
 ```sql
 -- MySQL Workbench Forward Engineering
@@ -22,117 +21,135 @@ CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
 USE `mydb` ;
 
 -- -----------------------------------------------------
--- Table `mydb`.`Origin`
+-- Table `mydb`.`user`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`Origin` ;
+DROP TABLE IF EXISTS `mydb`.`user` ;
 
-CREATE TABLE IF NOT EXISTS `mydb`.`Origin` (
-  `id` INT NOT NULL,
-  `name` VARCHAR(45) NULL,
-  `location` VARCHAR(45) NULL,
-  `rating` INT NULL,
+CREATE TABLE IF NOT EXISTS `mydb`.`user` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` TEXT NOT NULL,
+  `login` TEXT NOT NULL,
+  `password` TEXT NOT NULL,
+  `email` TEXT NOT NULL,
+  `role` TEXT NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Media`
+-- Table `mydb`.`help`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`Media` ;
+DROP TABLE IF EXISTS `mydb`.`help` ;
 
-CREATE TABLE IF NOT EXISTS `mydb`.`Media` (
-  `id` INT NOT NULL,
-  `type` VARCHAR(45) NULL,
-  `url` VARCHAR(45) NULL,
-  `name` VARCHAR(45) NULL,
-  `metadate` VARCHAR(45) NULL,
-  `Origin_id` INT NOT NULL,
+CREATE TABLE IF NOT EXISTS `mydb`.`help` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `title` TEXT NOT NULL,
+  `description` TEXT NOT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`filter`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `mydb`.`filter` ;
+
+CREATE TABLE IF NOT EXISTS `mydb`.`filter` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `date_from` DATETIME NOT NULL,
+  `date_to` DATETIME NOT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`request`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `mydb`.`request` ;
+
+CREATE TABLE IF NOT EXISTS `mydb`.`request` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `title` TEXT NOT NULL,
+  `description` TEXT NOT NULL,
+  `date` DATETIME NOT NULL,
+  `filter_id` INT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_Media_Origin_idx` (`Origin_id` ASC) VISIBLE,
-  CONSTRAINT `fk_Media_Origin`
-    FOREIGN KEY (`Origin_id`)
-    REFERENCES `mydb`.`Origin` (`id`)
+  INDEX `fk_request_filter1_idx` (`filter_id` ASC) VISIBLE,
+  CONSTRAINT `fk_request_filter1`
+    FOREIGN KEY (`filter_id`)
+    REFERENCES `mydb`.`filter` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Role`
+-- Table `mydb`.`access`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`Role` ;
+DROP TABLE IF EXISTS `mydb`.`access` ;
 
-CREATE TABLE IF NOT EXISTS `mydb`.`Role` (
-  `id` INT NOT NULL,
-  `name` VARCHAR(45) NULL,
-  `grants` VARCHAR(45) NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `mydb`.`User`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`User` ;
-
-CREATE TABLE IF NOT EXISTS `mydb`.`User` (
-  `id` INT NOT NULL,
-  `name` VARCHAR(45) NULL,
-  `login` VARCHAR(45) NULL,
-  `password` VARCHAR(45) NULL,
-  `email` VARCHAR(45) NULL,
-  `Role_id` INT NOT NULL,
+CREATE TABLE IF NOT EXISTS `mydb`.`access` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `role` TEXT NOT NULL,
+  `user_id` INT NOT NULL,
+  `help_id` INT NOT NULL,
+  `request_id` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_User_Role1_idx` (`Role_id` ASC) VISIBLE,
-  CONSTRAINT `fk_User_Role1`
-    FOREIGN KEY (`Role_id`)
-    REFERENCES `mydb`.`Role` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `mydb`.`Request`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`Request` ;
-
-CREATE TABLE IF NOT EXISTS `mydb`.`Request` (
-  `id` INT NOT NULL,
-  `desription` VARCHAR(45) NULL,
-  `Media_id` INT NOT NULL,
-  `User_id` INT NOT NULL,
-  PRIMARY KEY (`id`, `Media_id`),
-  INDEX `fk_Request_Media1_idx` (`Media_id` ASC) VISIBLE,
-  INDEX `fk_Request_User1_idx` (`User_id` ASC) VISIBLE,
-  CONSTRAINT `fk_Request_Media1`
-    FOREIGN KEY (`Media_id`)
-    REFERENCES `mydb`.`Media` (`id`)
+  INDEX `fk_access_User_idx` (`user_id` ASC) VISIBLE,
+  INDEX `fk_Access_Help1_idx` (`help_id` ASC) VISIBLE,
+  INDEX `fk_access_request1_idx` (`request_id` ASC) VISIBLE,
+  CONSTRAINT `fk_access_User`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `mydb`.`user` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Request_User1`
-    FOREIGN KEY (`User_id`)
-    REFERENCES `mydb`.`User` (`id`)
+  CONSTRAINT `fk_Access_Help1`
+    FOREIGN KEY (`help_id`)
+    REFERENCES `mydb`.`help` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_access_request1`
+    FOREIGN KEY (`request_id`)
+    REFERENCES `mydb`.`request` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Grant`
+-- Table `mydb`.`result`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`Grant` ;
+DROP TABLE IF EXISTS `mydb`.`result` ;
 
-CREATE TABLE IF NOT EXISTS `mydb`.`Grant` (
-  `id` INT NOT NULL,
-  `title` VARCHAR(45) NULL,
-  `description` VARCHAR(45) NULL,
-  `Role_id` INT NOT NULL,
-  PRIMARY KEY (`id`, `Role_id`),
-  INDEX `fk_Grant_Role1_idx` (`Role_id` ASC) VISIBLE,
-  CONSTRAINT `fk_Grant_Role1`
-    FOREIGN KEY (`Role_id`)
-    REFERENCES `mydb`.`Role` (`id`)
+CREATE TABLE IF NOT EXISTS `mydb`.`result` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `title` TEXT NOT NULL,
+  `description` TEXT NOT NULL,
+  `request_id` INT NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_result_request1_idx` (`request_id` ASC) VISIBLE,
+  CONSTRAINT `fk_result_request1`
+    FOREIGN KEY (`request_id`)
+    REFERENCES `mydb`.`request` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `mydb`.`source`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `mydb`.`source` ;
+
+CREATE TABLE IF NOT EXISTS `mydb`.`source` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `url` TEXT NOT NULL,
+  `request_id` INT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_source_request1_idx` (`request_id` ASC) VISIBLE,
+  CONSTRAINT `fk_source_request1`
+    FOREIGN KEY (`request_id`)
+    REFERENCES `mydb`.`request` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -141,7 +158,192 @@ ENGINE = InnoDB;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+-- -----------------------------------------------------
+-- Data for table `mydb`.`user`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `mydb`;
+INSERT INTO `mydb`.`user` (`id`, `name`, `login`, `password`, `email`, `role`) VALUES (DEFAULT, 'Володимир', 'Дмитро', '123456', 'kovalov280305@gmail.com', 'public');
+INSERT INTO `mydb`.`user` (`id`, `name`, `login`, `password`, `email`, `role`) VALUES (DEFAULT, 'Данило', 'Максим', '123456', 'kovalov280305@gmail.com', 'public');
+
+COMMIT;
+
+
+-- -----------------------------------------------------
+-- Data for table `mydb`.`request`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `mydb`;
+INSERT INTO `mydb`.`request` (`id`, `title`, `description`, `date`, `filter_id`) VALUES (DEFAULT, 'Text search query ', 'український бізнес під час війни', '2023-12-24', NULL);
+INSERT INTO `mydb`.`request` (`id`, `title`, `description`, `date`, `filter_id`) VALUES (DEFAULT, 'Photo search query', 'фото лазаньї оригінального рецепту', '2023-12-24', NULL);
+
+COMMIT;
+
+
+-- -----------------------------------------------------
+-- Data for table `mydb`.`source`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `mydb`;
+INSERT INTO `mydb`.`source` (`id`, `url`, `request_id`) VALUES (DEFAULT, 'https://forbes.ua', NULL);
+INSERT INTO `mydb`.`source` (`id`, `url`, `request_id`) VALUES (DEFAULT, 'https://images.google.com/', NULL);
+
+COMMIT;
 ```
 
 ## RESTfull сервіс для управління даними
 
+### Головний файл, з якого відбувається запуск сервера
+
+```js
+const express = require('express');
+const bodyParser = require('body-parser');
+const connection = require('./connection');
+const router = require('./router');
+
+const app = express();
+const port = 3030;
+
+connection.connect();
+
+app.use(bodyParser.json());
+app.use(router);
+
+app.listen(port, () => {
+  console.log(`Server started on localhost:${port}`);
+});
+```
+
+### Модуль підключення до бази даних
+
+```js
+const mysql = require('mysql2');
+
+const connectionUrl = 'mysql://root:k1llr34l@localhost:3306/mydb';
+const connection = mysql.createConnection({
+  uri: connectionUrl
+});
+
+module.exports = connection;
+```
+
+### Модуль з реалізацією REST API до таблиці Result
+
+```js
+const express = require('express');
+const connection = require('./connection');
+const router = express.Router();
+
+router.post('/result', (req, res) => {
+  const { title, description, request_id } = req.body;
+  
+  if(!(title && description && request_id)) {
+    res.send('Пусте поле');
+    return;
+  }
+  
+  connection.query(
+    `INSERT INTO result (id, title, description, request_id) 
+    VALUES (DEFAULT, '${title}', '${description}', ${request_id})`,
+  (error) => {
+    if (error) {
+      console.log(error);
+      res.send('Сталася помилка');
+      return;
+    }
+    res.send('Додано');
+  });
+});
+  
+router.post('/result/:id', (req, res) => {
+  const id = req.params.id;
+  const { title, description, request_id } = req.body;
+  
+  if(!(title && description && request_id)) {
+    res.send('Пусте поле');
+    return;
+  } 
+  
+  connection.query(
+    `INSERT INTO result (id, title, description, request_id) 
+    VALUES (${id}, '${title}', '${description}', ${request_id})`,
+  (error) => {
+    if (error) {
+      console.log(error);
+      res.send('Сталася помилка');
+      return;
+    }
+    res.send('Додано');
+  });
+});
+  
+router.get('/results', (req, res) => {
+  connection.query('SELECT * FROM result', 
+  (error, result) => {
+    if (error) {
+      console.log(error);
+      res.send('Сталася помилка');
+      return;
+    }
+    res.send(result);
+  });
+});
+  
+router.get('/result/:id', (req, res) => {
+  const id = req.params.id;
+  connection.query(`SELECT * FROM result WHERE id = ${id}`,
+  (error, result) => {
+    if (error) {
+      console.log(error);
+      res.send('Сталася помилка');
+      return;
+    }
+    res.send(result);
+  });
+});
+  
+router.put('/result/:id', (req, res) => {
+  const id = req.params.id;
+  
+  connection.query(`SELECT * FROM result WHERE id = ${id}`,
+  (error, [result]) => {
+    if (error) {
+      console.log(result);
+      console.log(error);
+      res.send('Сталася помилка');
+      return;
+    }
+    const { title, description, request_id } = { ...result, ...req.body};
+    connection.query(
+      `UPDATE result 
+      SET title = '${title}', 
+      description = '${description}', 
+      request_id = ${request_id} 
+      WHERE id = ${id}`,
+    (error) => {
+      if (error) {
+        console.log(error);
+      res.send('Сталася помилка');
+        return;
+      }
+      res.send('Оновлено');
+    });
+  });
+});
+  
+router.delete('/result/:id', (req, res) => {
+  const id = req.params.id;
+  connection.query(`DELETE FROM result WHERE id = ${id}`,
+  (error) => {
+    if (error) {
+      console.log(error);
+      res.send('Сталася помилка');
+      return;
+    }
+    res.send('Видалено');
+  });
+});
+
+module.exports = router;
+```
