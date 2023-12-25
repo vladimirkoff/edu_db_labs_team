@@ -2,34 +2,34 @@
 
 ## Тестування REST API
 
-### POST - create
+### POST 
 
-#### Таблиця перед запитом
+#### Перед запитом
 ![alt text](./img/post_before.png)
 #### Запит
 ![alt text](./img/post.png)
-#### Таблиця після запиту
+#### Після запиту
 ![alt text](./img/post_after.png)
 
-### GET - read
+### GET
 
-#### Пошук за id
+#### Пошук 
 ![alt text](./img/get_id.png)
 
-### PUT - update
+### PUT 
 
-#### Елемент перед запитом
+#### Перед запитом
 ![alt text](./img/get_id.png)
 #### Запит
 ![alt text](./img/put.png)
-#### Елемент після запиту
+#### Після запиту
 ![alt text](./img/put_after.png)
 
 ### DELETE
 
-#### Таблиця перед запитом
+#### Перед запитом
 ![alt text](./img/delete_after.png)
 #### Запит
 ![alt text](./img/delete.png)
-#### Таблиця після запиту
+#### Після запиту
 ![alt text](./img/delete_before.png)
