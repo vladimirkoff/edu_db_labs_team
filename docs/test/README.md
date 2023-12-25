@@ -19,11 +19,11 @@
 ### PUT 
 
 #### Перед запитом
-![alt text](./img/get_id.png)
+![alt text](./img/put_after.png)
 #### Запит
 ![alt text](./img/put.png)
 #### Після запиту
-![alt text](./img/put_after.png)
+![alt text](./img/get_id.png)
 
 ### DELETE
 
