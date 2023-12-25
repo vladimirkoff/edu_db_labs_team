@@ -28,8 +28,8 @@
 ### DELETE
 
 #### Перед запитом
-![alt text](./img/delete_after.png)
+![alt text](./img/delete_before.png)
 #### Запит
 ![alt text](./img/delete.png)
 #### Після запиту
-![alt text](./img/delete_before.png)
+![alt text](./img/delete_after.png)
